@@ -17,14 +17,17 @@
         that: "'wget' in ansible_facts.packages"
         fail_msg: "wget should be installed"
 
-    - name: Read /etc/timezone
-      ansible.builtin.slurp:
-        src: /etc/timezone
-      register: tz_file
+    - name: Check /etc/localtime symlink
+      ansible.builtin.stat:
+        path: /etc/localtime
+        follow: false
+      register: localtime_stat
 
     - name: Verify timezone is America/New_York
       ansible.builtin.assert:
-        that: "(tz_file.content | b64decode | trim) == 'America/New_York'"
+        that:
+          - localtime_stat.stat.islnk
+          - localtime_stat.stat.lnk_source == '/usr/share/zoneinfo/America/New_York'
         fail_msg: "Timezone should be America/New_York"
 
     - name: Read /etc/default/locale
