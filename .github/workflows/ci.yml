@@ -71,5 +71,5 @@ jobs:
           -p $GITHUB_WORKSPACE
 
       - name: Run Molecule tests
-        working-directory: ansible_collections/baselines/baselines/extensions/molecule/${{ matrix.scenario }}
-        run: molecule test
+        working-directory: ansible_collections/baselines/baselines/extensions
+        run: molecule test -s ${{ matrix.scenario }}
