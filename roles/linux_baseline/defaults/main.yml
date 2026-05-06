@@ -1,0 +1,21 @@
+---
+linux_baseline_common_packages:
+  - nano
+  - wget
+  - iproute2
+
+linux_baseline_timezone: "Europe/London"
+
+linux_baseline_locale: "en_GB.UTF-8"
+
+linux_baseline_ntp_enabled: true
+linux_baseline_ntp_package: chrony
+linux_baseline_ntp_service: chrony
+linux_baseline_ntp_servers:
+  - 0.uk.pool.ntp.org
+  - 1.uk.pool.ntp.org
+  - 2.uk.pool.ntp.org
+  - 3.uk.pool.ntp.org
+
+linux_baseline_perform_system_update: true
+linux_baseline_auto_reboot_after_update: false

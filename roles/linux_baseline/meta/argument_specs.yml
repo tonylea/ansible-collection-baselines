@@ -1,0 +1,60 @@
+---
+argument_specs:
+  main:
+    short_description: Apply baseline configuration to a Debian Linux host
+    description:
+      - Installs common packages, sets timezone and locale, and configures chrony for NTP.
+    options:
+      linux_baseline_common_packages:
+        type: list
+        elements: str
+        default:
+          - nano
+          - wget
+          - iproute2
+        description: List of packages to install on every host.
+
+      linux_baseline_timezone:
+        type: str
+        default: Europe/London
+        description: System timezone in IANA format (e.g. Europe/London, America/New_York).
+
+      linux_baseline_locale:
+        type: str
+        default: en_GB.UTF-8
+        description: System locale to generate and set as the default LANG.
+
+      linux_baseline_ntp_enabled:
+        type: bool
+        default: true
+        description: Install and configure chrony for NTP synchronisation.
+
+      linux_baseline_ntp_package:
+        type: str
+        default: chrony
+        description: Name of the NTP package to install.
+
+      linux_baseline_ntp_service:
+        type: str
+        default: chrony
+        description: Name of the NTP service managed by systemd.
+
+      linux_baseline_ntp_servers:
+        type: list
+        elements: str
+        default:
+          - 0.uk.pool.ntp.org
+          - 1.uk.pool.ntp.org
+          - 2.uk.pool.ntp.org
+          - 3.uk.pool.ntp.org
+        description: List of NTP pool servers written to chrony.conf.
+
+      linux_baseline_perform_system_update:
+        type: bool
+        default: true
+        description: Run a full dist-upgrade before installing packages.
+
+      linux_baseline_auto_reboot_after_update:
+        type: bool
+        default: false
+        description: Reserved for future use. Reboot the host after a system upgrade if required.

@@ -1,0 +1,12 @@
+---
+- name: Restart cron
+  ansible.builtin.systemd:
+    name: cron
+    state: restarted
+  listen: Restart cron
+
+- name: Restart chrony
+  ansible.builtin.systemd:
+    name: chrony
+    state: restarted
+  listen: Restart chrony

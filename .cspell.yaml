@@ -29,6 +29,9 @@ words:
   - sysctl
   - swappiness
   - iburst
+  - autoremove
+  - autoclean
+  - synchronisation
 
   # macOS
   - homebrew

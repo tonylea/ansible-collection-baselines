@@ -1,0 +1,9 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Install Python, sudo, and role prerequisites
+      ansible.builtin.raw: >-
+        apt-get update &&
+        apt-get install -y python3 sudo locales cron tzdata
