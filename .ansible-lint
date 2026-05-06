@@ -1,0 +1,10 @@
+---
+exclude_paths:
+  - .claude/
+  - .github/
+  - extensions/molecule/
+
+skip_list:
+  - yaml[truthy]
+  - galaxy[no-runtime]
+  - galaxy[no-repository]

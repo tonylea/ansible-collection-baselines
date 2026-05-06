@@ -1,0 +1,13 @@
+---
+namespace: baselines
+name: baselines
+version: 1.0.0
+readme: README.md
+authors:
+  - baselines
+description: Baseline configuration roles for Linux, macOS, and Raspberry Pi systems
+license:
+  - MIT
+tags:
+  - linux
+  - infrastructure

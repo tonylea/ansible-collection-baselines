@@ -1,0 +1,58 @@
+---
+version: "0.2"
+
+ignorePaths:
+  - .claude/
+  - .github/
+  - .git/
+  - .ansible/
+  - node_modules/
+  - extensions/molecule/
+  - CLAUDE.md
+  - "*.j2"
+
+language: en
+
+words:
+  # Ansible / collection
+  - ansible
+  - builtin
+  - systemd
+  - blockinfile
+  - lineinfile
+  - trixie
+  - posix
+  - chrony
+  - zram
+  - zramswap
+  - logrotate
+  - sysctl
+  - swappiness
+  - iburst
+
+  # macOS
+  - homebrew
+  - softwareupdate
+  - launchd
+  - socketfilterfw
+  - scutil
+  - pyenv
+  - localhos
+
+  # Config filenames
+  - commitlintrc
+  - versionrc
+  - markdownlint
+
+  # Misc
+  - jrei
+  - FQCN
+  - FQCNs
+  - optimisation
+  - Optimises
+
+  # Project
+  - tonylea
+  - homelab
+  - baselines
+  - raspberry
