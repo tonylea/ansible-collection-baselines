@@ -73,4 +73,6 @@ jobs:
 
       - name: Run Molecule tests
         working-directory: ansible_collections/baselines/baselines/extensions
+        env:
+          ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}
         run: molecule test -s ${{ matrix.scenario }}
