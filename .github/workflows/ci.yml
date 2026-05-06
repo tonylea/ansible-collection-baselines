@@ -68,6 +68,7 @@ jobs:
         run: >-
           ansible-galaxy collection install
           -r ansible_collections/baselines/baselines/requirements-collections.yml
+          -r ansible_collections/baselines/baselines/requirements-test-collections.yml
           -p $GITHUB_WORKSPACE
 
       - name: Run Molecule tests
