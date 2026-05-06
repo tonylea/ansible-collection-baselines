@@ -1,0 +1,67 @@
+---
+- name: Verify custom variables
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: apt
+
+    - name: Verify curl is installed from custom common_packages
+      ansible.builtin.assert:
+        that: "'curl' in ansible_facts.packages"
+        fail_msg: "curl should be installed"
+
+    - name: Verify wget is installed from custom common_packages
+      ansible.builtin.assert:
+        that: "'wget' in ansible_facts.packages"
+        fail_msg: "wget should be installed"
+
+    - name: Read /etc/timezone
+      ansible.builtin.slurp:
+        src: /etc/timezone
+      register: tz_file
+
+    - name: Verify timezone is America/New_York
+      ansible.builtin.assert:
+        that: "(tz_file.content | b64decode | trim) == 'America/New_York'"
+        fail_msg: "Timezone should be America/New_York"
+
+    - name: Read /etc/default/locale
+      ansible.builtin.slurp:
+        src: /etc/default/locale
+      register: locale_file
+
+    - name: Verify default locale is en_US.UTF-8
+      ansible.builtin.assert:
+        that: "'LANG=en_US.UTF-8' in (locale_file.content | b64decode)"
+        fail_msg: "Default locale should be en_US.UTF-8"
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify chrony service is running
+      ansible.builtin.assert:
+        that: ansible_facts.services['chrony.service'].state == 'running'
+        fail_msg: "chrony service should be running"
+
+    - name: Read /etc/chrony/chrony.conf
+      ansible.builtin.slurp:
+        src: /etc/chrony/chrony.conf
+      register: chrony_conf
+
+    - name: Set chrony config fact
+      ansible.builtin.set_fact:
+        chrony_config: "{{ chrony_conf.content | b64decode }}"
+
+    - name: Verify custom US NTP servers are in chrony.conf
+      ansible.builtin.assert:
+        that:
+          - "'pool 0.us.pool.ntp.org iburst' in chrony_config"
+          - "'pool 1.us.pool.ntp.org iburst' in chrony_config"
+        fail_msg: "chrony.conf should contain custom US NTP servers"
+
+    - name: Verify default UK NTP servers are not in chrony.conf
+      ansible.builtin.assert:
+        that: "'pool 0.uk.pool.ntp.org iburst' not in chrony_config"
+        fail_msg: "chrony.conf should not contain default UK NTP servers"

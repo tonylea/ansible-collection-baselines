@@ -1,0 +1,87 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: apt
+
+    - name: Verify nano is installed
+      ansible.builtin.assert:
+        that: "'nano' in ansible_facts.packages"
+        fail_msg: "nano should be installed"
+
+    - name: Verify wget is installed
+      ansible.builtin.assert:
+        that: "'wget' in ansible_facts.packages"
+        fail_msg: "wget should be installed"
+
+    - name: Verify iproute2 is installed
+      ansible.builtin.assert:
+        that: "'iproute2' in ansible_facts.packages"
+        fail_msg: "iproute2 should be installed"
+
+    - name: Read /etc/timezone
+      ansible.builtin.slurp:
+        src: /etc/timezone
+      register: tz_file
+
+    - name: Verify timezone is Europe/London
+      ansible.builtin.assert:
+        that: "(tz_file.content | b64decode | trim) == 'Europe/London'"
+        fail_msg: "Timezone should be Europe/London"
+
+    - name: Read /etc/default/locale
+      ansible.builtin.slurp:
+        src: /etc/default/locale
+      register: locale_file
+
+    - name: Verify default locale is en_GB.UTF-8
+      ansible.builtin.assert:
+        that: "'LANG=en_GB.UTF-8' in (locale_file.content | b64decode)"
+        fail_msg: "Default locale should be en_GB.UTF-8"
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify chrony service is running
+      ansible.builtin.assert:
+        that: ansible_facts.services['chrony.service'].state == 'running'
+        fail_msg: "chrony service should be running"
+
+    - name: Verify chrony service is enabled
+      ansible.builtin.assert:
+        that: ansible_facts.services['chrony.service'].status == 'enabled'
+        fail_msg: "chrony service should be enabled at boot"
+
+    - name: Read /etc/chrony/chrony.conf
+      ansible.builtin.slurp:
+        src: /etc/chrony/chrony.conf
+      register: chrony_conf
+
+    - name: Set chrony config fact
+      ansible.builtin.set_fact:
+        chrony_config: "{{ chrony_conf.content | b64decode }}"
+
+    - name: Verify UK NTP pool servers are in chrony.conf
+      ansible.builtin.assert:
+        that:
+          - "'pool 0.uk.pool.ntp.org iburst' in chrony_config"
+          - "'pool 1.uk.pool.ntp.org iburst' in chrony_config"
+          - "'pool 2.uk.pool.ntp.org iburst' in chrony_config"
+          - "'pool 3.uk.pool.ntp.org iburst' in chrony_config"
+        fail_msg: "chrony.conf should contain all four UK NTP pool servers"
+
+    - name: Check chrony.conf file permissions
+      ansible.builtin.stat:
+        path: /etc/chrony/chrony.conf
+      register: chrony_stat
+
+    - name: Verify chrony.conf is root:root 0644
+      ansible.builtin.assert:
+        that:
+          - chrony_stat.stat.mode == '0644'
+          - chrony_stat.stat.pw_name == 'root'
+          - chrony_stat.stat.gr_name == 'root'
+        fail_msg: "chrony.conf should be owned by root:root with mode 0644"

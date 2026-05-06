@@ -1,0 +1,16 @@
+---
+- name: Converge with custom variables
+  hosts: all
+  become: true
+  roles:
+    - role: baselines.baselines.linux_baseline
+      vars:
+        linux_baseline_timezone: "America/New_York"
+        linux_baseline_locale: "en_US.UTF-8"
+        linux_baseline_ntp_servers:
+          - 0.us.pool.ntp.org
+          - 1.us.pool.ntp.org
+        linux_baseline_common_packages:
+          - curl
+          - wget
+        linux_baseline_perform_system_update: false
