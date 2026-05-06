@@ -1,0 +1,22 @@
+{
+  "name": "ansible-collection-baselines",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint:ansible": "ansible-lint",
+    "lint:spell": "cspell \"**/*\"",
+    "lint:markdown": "markdownlint-cli2",
+    "lint": "npm run lint:ansible && npm run lint:spell && npm run lint:markdown",
+    "prepare": "husky",
+    "release": "commit-and-tag-version"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "commit-and-tag-version": "^12.7.1",
+    "cspell": "^10.0.0",
+    "husky": "^9.1.7",
+    "markdownlint-cli2": "^0.22.1"
+  }
+}

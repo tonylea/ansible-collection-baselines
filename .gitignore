@@ -1,0 +1,9 @@
+CLAUDE.md
+node_modules/
+.ansible/
+*.pyc
+__pycache__/
+.cache/
+*.retry
+.molecule/
+.pytest_cache/
